@@ -45,6 +45,7 @@ jobs:
     - name: Upload result to GitHub Code Scanning
       uses: github/codeql-action/upload-sarif@v3
       with:
-        sarif_file: snyk.sarif  # Cambiado a sarif_file para indicar el archivo específico
+        sarif_file: snyk.sarif  # Este es el archivo SARIF único generado por Snyk
+
 
 
