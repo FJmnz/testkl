@@ -36,10 +36,6 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build a Docker image
       run: docker build -t your/image-to-test .
-
-    - name: Replace security-severity null for license-related findings 
-      run: sed -i 's/"security-severity":"null"/"security-severity":"0"/g' snyk.sarif
-      
     - name: Run Snyk to check Docker image for vulnerabilities
       # Snyk can be used to break the build when it detects vulnerabilities.
       # In this case we want to upload the issues to GitHub Code Scanning
@@ -52,8 +48,7 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         image: your/image-to-test
-        args: --file=Dockerfile 
-      
+        args: --file=Dockerfile
     - name: Upload result to GitHub Code Scanning
       uses: github/codeql-action/upload-sarif@v3
       with:
