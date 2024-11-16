@@ -44,11 +44,14 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         image: your/image-to-test
-        args: --file=Dockerfile
+        args: --file=Dockerfile --all-proyects --debug
 
     - name: Convert Snyk results to SARIF (if not already in SARIF format)
       run: snyk monitor --docker your/image-to-test --all-projects --sarif > snyk.sarif
       # Este paso genera un archivo SARIF usando Snyk
+      
+    - name: List files for debugging
+      run: ls -la
 
     - name: Upload result to GitHub Code Scanning
       uses: github/codeql-action/upload-sarif@v3
