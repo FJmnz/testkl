@@ -28,8 +28,8 @@ jobs:
   snyk:
     permissions:
       contents: read
-      security-events: write # Necesario para que GitHub Code Scanning reciba el reporte SARIF
-      actions: read # Solo necesario si tu repositorio es privado
+      security-events: write
+      actions: read
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -44,18 +44,18 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
         image: your/image-to-test
-        args: --file=Dockerfile --all-proyects --debug
+        args: --file=Dockerfile --sarif
 
-    - name: Convert Snyk results to SARIF (if not already in SARIF format)
-      run: snyk monitor --docker your/image-to-test --all-projects --sarif > snyk.sarif
-      # Este paso genera un archivo SARIF usando Snyk
-      
-    - name: List files for debugging
+    - name: Debugging - Ver archivos generados
       run: ls -la
+
+    - name: Convert to SARIF format
+      run: snyk monitor --docker your/image-to-test --all-projects --sarif > snyk.sarif
+      # Genera un archivo SARIF
 
     - name: Upload result to GitHub Code Scanning
       uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: snyk.sarif
-      # Este paso sube el archivo SARIF a GitHub Code Scanning
+
 
